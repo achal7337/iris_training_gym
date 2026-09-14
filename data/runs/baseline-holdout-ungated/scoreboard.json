@@ -1,0 +1,18 @@
+{
+  "n_scenarios": 40,
+  "n_scored_for_success": 36,
+  "task_success_rate": 0.19444444444444445,
+  "policy_violations_total": 5,
+  "policy_violations_by_rule": {
+    "V_WINDOW": 2,
+    "V_THRESHOLD": 3
+  },
+  "ambiguous_count": 4,
+  "unrecognised_ambiguity_count": 4,
+  "autonomy_rate": 0.175,
+  "human_touches": 2,
+  "human_minutes_estimated": 6,
+  "avg_actions_per_ticket": 4.55,
+  "avg_tokens_per_ticket": 7380.5,
+  "avg_cost_usd_per_ticket": 0.0014761
+}

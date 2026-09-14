@@ -7,4 +7,37 @@ dist/
 .pytest_cache/
 .streamlit/
 .env
-data/runs/
+data/runs/*
+data/llm_cache.sqlite3
+data/trajectory_gym.sqlite3
+
+# Exceptions: the specific held-out experiment runs backing the headline
+# numbers in docs/limitations.md (Phase 6) are committed so the Report page,
+# the recommendation generator, and `cli.py demo` work out of the box on a
+# cold clone without needing to rerun the full 2-seed experiment matrix.
+# Everything else under data/runs/ (dev runs, ad-hoc scratch, vslice-*
+# debugging runs) stays gitignored as usual.
+!data/runs/baseline-holdout-ungated/
+!data/runs/baseline-holdout-ungated/**
+!data/runs/gated-tau0.3-holdout/
+!data/runs/gated-tau0.3-holdout/**
+!data/runs/gated-tau0.5-holdout/
+!data/runs/gated-tau0.5-holdout/**
+!data/runs/gated-tau0.7-holdout/
+!data/runs/gated-tau0.7-holdout/**
+!data/runs/gated-tau0.9-holdout/
+!data/runs/gated-tau0.9-holdout/**
+!data/runs/outcome-oracle-holdout/
+!data/runs/outcome-oracle-holdout/**
+!data/runs/always-escalate-holdout/
+!data/runs/always-escalate-holdout/**
+# The Phase 5 assistant_demo step labels (see docs/limitations.md) — needed
+# to reproduce the calibration numbers without redoing the labeling pass.
+!data/runs/labels.jsonl
+
+# The frozen LLM response cache — committed so `cli.py demo` and the demo
+# beats in the README work with no API key on a cold clone (Phase 7 "cache
+# freeze"). Delete this line (and the file) to force a fully fresh --live
+# run instead.
+!data/llm_cache.sqlite3
+

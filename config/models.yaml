@@ -1,0 +1,55 @@
+# Maps each LLM role to a provider/model/temperature/max_tokens.
+# Model IDs live here, never in code. Set `provider: mock` (as below, the
+# default) to run with zero network and zero cost — this is what `make test`
+# and `make demo` use. Swap providers per-role for a `--live` run.
+#
+# Model selection history and rationale: docs/limitations.md.
+
+agent:
+  provider: openrouter
+  model: nvidia/nemotron-3.5-lightning
+  temperature: 0.3
+  max_tokens: 1500
+
+judge:
+  provider: openrouter          # Different model family from the agent (self-preference
+  model: meta-llama/llama-3.3-70b-instruct  # avoidance, Section 8), even though both
+  temperature: 0.0              # currently sit on the same provider.
+  max_tokens: 400
+
+selector:
+  provider: mock
+  model: mock-selector-v1
+  temperature: 0.0
+  max_tokens: 128
+
+writer:
+  provider: openrouter
+  model: meta-llama/llama-3.1-8b-instruct
+  temperature: 0.9
+  max_tokens: 170
+
+recommendation:
+  provider: openrouter          # One-shot report generation (not per-ticket), so a
+  model: meta-llama/llama-3.3-70b-instruct  # larger model is affordable regardless of cost.
+  temperature: 0.3
+  max_tokens: 1400
+
+# Reference configuration for --live runs (uncomment / edit and point the
+# role above at it). Kept here so real model IDs are still config, not code.
+# live_example:
+#   agent:
+#     provider: openrouter
+#     model: meta-llama/llama-3.1-8b-instruct
+#     temperature: 0.3
+#     max_tokens: 512
+#   judge:
+#     provider: gemini
+#     model: gemini-1.5-flash
+#     temperature: 0.0
+#     max_tokens: 256
+#   writer:
+#     provider: openrouter
+#     model: meta-llama/llama-3.1-8b-instruct
+#     temperature: 0.9
+#     max_tokens: 200
