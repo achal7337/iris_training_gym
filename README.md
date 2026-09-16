@@ -99,17 +99,4 @@ docs/              reward_design, failure_taxonomy, limitations, not_built
 tests/             offline, mock-only, zero cost
 ```
 
-## Documentation map
 
-- **`prompt.md`**: the full build spec this project was built against.
-- **`docs/reward_design.md`**: the policy document's deliberate defects
-  (an ambiguity, a cross-section inconsistency, a retrieval trap) and why
-  outcome and cost are never combined into one score.
-- **`docs/failure_taxonomy.md`**: the predicted failure modes, written
-  before the first run, with an honest after-the-fact accounting.
-- **`docs/limitations.md`**: a running, dated log of every real limitation
-  hit while building this: model swaps under quota pressure, AI-assistant
-  labels standing in for human ones, the τ=0.9 dead zone, and more.
-- **`docs/not_built.md`**: what's explicitly out of scope, what was cut
-  vs. not cut from the spec's cut list, and what's deliberately not
-  reported (e.g. no per-class success rates at n=5).
