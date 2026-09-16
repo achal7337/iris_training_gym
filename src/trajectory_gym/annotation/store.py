@@ -37,5 +37,12 @@ def load_labels(path: Path | str = DEFAULT_STORE_PATH, dedupe: bool = True) -> l
     return list(latest.values())
 
 
-def labeled_keys(path: Path | str = DEFAULT_STORE_PATH) -> set[tuple[str, int]]:
-    return {(label.trajectory_id, label.step_index) for label in load_labels(path)}
+def labeled_keys(path: Path | str = DEFAULT_STORE_PATH, source: str | None = None) -> set[tuple[str, int]]:
+    """Keys with a saved label. Pass source (e.g. "human") to count only
+    labels from that source as done — a step already labeled by another
+    source stays available to relabel."""
+    return {
+        (label.trajectory_id, label.step_index)
+        for label in load_labels(path)
+        if source is None or label.source == source
+    }

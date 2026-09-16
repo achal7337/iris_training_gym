@@ -34,7 +34,11 @@ class ResponseCache:
     def __init__(self, path: Path | str = DEFAULT_CACHE_PATH):
         self.path = Path(path)
         self.path.parent.mkdir(parents=True, exist_ok=True)
-        self._conn = sqlite3.connect(self.path)
+        # check_same_thread=False: Streamlit reruns and widget callbacks can land on a
+        # different thread than the one that first created this cached singleton
+        # (see llm/client.py's @lru_cache). Access here is still effectively serial —
+        # Streamlit runs one script execution at a time — so relaxing this is safe.
+        self._conn = sqlite3.connect(self.path, check_same_thread=False)
         self._conn.execute(_SCHEMA)
         self._conn.commit()
 

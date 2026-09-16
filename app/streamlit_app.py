@@ -30,6 +30,7 @@ from trajectory_gym.config import get_gate_config  # noqa: E402
 from trajectory_gym.eval.metrics import compute_scoreboard  # noqa: E402
 from trajectory_gym.models.annotation import StepLabel  # noqa: E402
 from trajectory_gym.models.scenario import Scenario  # noqa: E402
+from trajectory_gym.report.recommendation import generate_recommendation  # noqa: E402
 
 st.set_page_config(page_title="Trajectory Gym", layout="wide")
 
@@ -217,14 +218,18 @@ def review_page() -> None:
         )
         return
 
-    done_keys = labeled_keys()
-    remaining = [item for item in queue if (item["trajectory_id"], item["step_index"]) not in done_keys]
+    human_keys = labeled_keys(source="human")
+    remaining = [item for item in queue if (item["trajectory_id"], item["step_index"]) not in human_keys]
 
-    st.caption(f"{len(done_keys)} / {len(queue)} graded")
-    st.progress(min(1.0, len(done_keys) / len(queue)) if queue else 0.0)
+    st.caption(
+        f"{len(human_keys)} / {len(queue)} graded by a human. "
+        "The rest already carry an `assistant_demo` label (an LLM stand-in used to validate "
+        "the pipeline — see docs/limitations.md) and are open here to grade for real."
+    )
+    st.progress(min(1.0, len(human_keys) / len(queue)) if queue else 0.0)
 
     if not remaining:
-        st.success("Queue fully graded! Head to the Report page (once built) for calibration numbers.")
+        st.success("Every queue item has a human label. Head to the Report page for calibration numbers.")
         return
 
     item = remaining[0]
@@ -368,7 +373,13 @@ def report_page() -> None:
 
     st.divider()
     st.subheader("Customer recommendation")
-    st.info("Recommendation generator lands in Phase 7 (`report/recommendation.py`).")
+    st.caption("LLM-filled from the scoreboard and hand-counted failure data above — never a hard-coded number.")
+    if st.button("Generate recommendation"):
+        with st.spinner("Writing recommendation from the real scoreboard..."):
+            try:
+                st.markdown(generate_recommendation())
+            except Exception as exc:  # missing scoreboard/run data, no cached LLM response, etc.
+                st.error(f"Couldn't generate a recommendation: {exc}")
 
 
 # ---------------------------------------------------------------------------
